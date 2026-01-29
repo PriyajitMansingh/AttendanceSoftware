@@ -37,12 +37,22 @@ document
 
       const data = await res.json();
 
+      // if (res.ok) {
+      //   alert("Signup successful! Please login.");
+      //   window.location.href = "login.html";
+      // } else {
+      //   alert(data.error || "Signup failed");
+      // }
+
       if (res.ok) {
-        alert("Signup successful! Please login.");
-        window.location.href = "login.html";
-      } else {
-        alert(data.error || "Signup failed");
-      }
+  successMsg.innerHTML = "✅ Signup successful! Redirecting to login...";
+  
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 1500);
+}else{
+ successMsg.innerHTML="Signup failed"
+}
     } catch (err) {
       console.error(err);
       alert("Server not reachable");

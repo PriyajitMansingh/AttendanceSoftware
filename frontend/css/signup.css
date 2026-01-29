@@ -180,4 +180,13 @@ body {
   }
 }
 
+.success {
+  color: #28a745;
+  font-size: 15px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 

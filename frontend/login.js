@@ -1,20 +1,33 @@
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-  let mobile = document.getElementById("mobile").value;
-  let password = document.getElementById("password").value;
+    const mobile = document.getElementById("mobile").value;
+    const password = document.getElementById("password").value;
 
-  let storedUser = JSON.parse(localStorage.getItem("userData"));
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mobile, password }),
+      });
 
-  if (!storedUser) {
-    alert("No user found. Please signup.");
-    return;
-  }
+      const data = await res.json();
 
-  if (mobile === storedUser.mobile && password === storedUser.password) {
-    alert("Login successful");
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Invalid mobile number or password");
-  }
-});
+      if (res.ok) {
+        // store token for later authenticated requests
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user || {}));
+        alert("Login successful");
+        window.location.href = "dashboard.html";
+      } else {
+        alert(data.error || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server not reachable");
+    }
+  });
